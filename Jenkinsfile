@@ -27,7 +27,7 @@ pipeline {
             steps {
                 container('maven') {
                     sh 'mvn clean package -DskipTests'
-                    sh 'podman build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+                    sh 'podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME', credentialsId: "$DOCKER_CREDENTIAL_ID",)]) {
                         sh 'echo "$DOCKER_PASSWORD" | podman login --tls-verify=false $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
                         sh 'podman push --tls-verify=false $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
