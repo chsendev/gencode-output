@@ -14,6 +14,8 @@ pipeline {
         GITHUB_ACCOUNT = 'chsendev' // change me
         // 从分支名中提取版本号 (例如: xxx/v1.0.0 -> v1.0.0)
         TAG_NAME = "${BRANCH_NAME.split('/').last()}"
+        // 将分支名中的 / 替换为 - 用于 Docker 标签
+        SAFE_BRANCH_NAME = "${BRANCH_NAME.replace('/', '-')}"
     }
 
     stages {
@@ -27,10 +29,10 @@ pipeline {
             steps {
                 container('maven') {
                     sh 'mvn clean package -DskipTests'
-                    sh 'podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+                    sh 'podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME', credentialsId: "$DOCKER_CREDENTIAL_ID",)]) {
                         sh 'echo "$DOCKER_PASSWORD" | podman login --tls-verify=false $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'podman push --tls-verify=false $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
+                        sh 'podman push --tls-verify=false $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER'
                     }
                 }
             }
@@ -42,7 +44,7 @@ pipeline {
             }
             steps {
                 container('maven') {
-                    sh 'podman tag $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:latest '
+                    sh 'podman tag $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:latest '
                     sh 'podman push --tls-verify=false $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:latest '
                 }
             }
@@ -63,7 +65,7 @@ pipeline {
                         sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
                         sh 'git push http://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/devops-maven-sample.git --tags --ipv4'
                     }
-                    sh 'podman tag $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:$TAG_NAME '
+                    sh 'podman tag $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:$TAG_NAME '
                     sh 'podman push --tls-verify=false $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:$TAG_NAME '
                 }
             }
