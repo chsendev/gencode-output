@@ -28,7 +28,7 @@ spec:
               value: js|html
             - name: CACHE_PUBLIC_EXPIRATION
               value: 3d
-          image: $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER
           readinessProbe:
             httpGet:
               path: /
