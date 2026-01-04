@@ -70,5 +70,25 @@ pipeline {
                 }
             }
         }
+
+        stage('deploy to k8s') {
+          when{
+            expression{
+              return params.TAG_NAME =~ /v.*/
+            }
+          }
+          steps {
+            input(id: 'deploy-to-k8s', message: 'deploy to k8s?')
+            container ('maven') {
+                withCredentials([
+                    kubeconfigFile(
+                    credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
+                    variable: 'KUBECONFIG')
+                    ]) {
+                    sh 'envsubst < deploy/test.yaml | kubectl apply -f -'
+                }
+            }
+          }
+        }
     }
 }
