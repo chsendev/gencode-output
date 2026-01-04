@@ -6,7 +6,7 @@ metadata:
     component: gentest-dev
     tier: backend
   name: gentest-dev
-  namespace: $PROJECT_NAME
+  namespace: gencode
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -62,7 +62,7 @@ metadata:
     app: kubesphere
     component: gentest-dev
   name: gentest-dev
-  namespace: $PROJECT_NAME
+  namespace: gencode
 spec:
   ports:
     - name: http
