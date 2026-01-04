@@ -62,7 +62,6 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh 'git config --global user.email "kubesphere@yunify.com" '
                         sh 'git config --global user.name "kubesphere" '
-                        sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
                         sh 'git push http://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/devops-maven-sample.git --tags --ipv4'
                     }
                     sh 'podman tag $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:$TAG_NAME '
@@ -72,11 +71,6 @@ pipeline {
         }
 
         stage('deploy to k8s') {
-          when{
-            expression{
-              return params.TAG_NAME =~ /v.*/
-            }
-          }
           steps {
             input(id: 'deploy-to-k8s', message: 'deploy to k8s?')
             container ('maven') {
