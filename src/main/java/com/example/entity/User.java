@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * 用户表
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

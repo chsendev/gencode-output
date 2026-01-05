@@ -6,7 +6,7 @@ import com.example.entity.Product;
 /**
  * 产品表Mapper接口
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 public interface ProductMapper extends BaseMapper<Product> {
 

@@ -10,7 +10,7 @@ import com.example.service.IProductService;
 /**
  * 产品表Controller
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 @RestController
 @RequestMapping("/product")

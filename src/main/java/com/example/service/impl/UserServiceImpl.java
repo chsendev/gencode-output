@@ -9,7 +9,7 @@ import com.example.service.IUserService;
 /**
  * 用户表Service实现类
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {

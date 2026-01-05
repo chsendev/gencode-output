@@ -6,7 +6,7 @@ import com.example.entity.User;
 /**
  * 用户表Mapper接口
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 public interface UserMapper extends BaseMapper<User> {
 

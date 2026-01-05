@@ -9,7 +9,7 @@ import com.example.service.IProductService;
 /**
  * 产品表Service实现类
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements IProductService {

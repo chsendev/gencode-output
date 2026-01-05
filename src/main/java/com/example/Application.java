@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * SpringBoot启动类
  * 
  * @author CodeGenerator
- * @date 2026-01-04
+ * @date 2026-01-05
  */
 @SpringBootApplication
 @MapperScan("com.example.mapper")
