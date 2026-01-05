@@ -28,6 +28,8 @@ pipeline {
         stage('build & push') {
             steps {
                 container('maven') {
+                    sh 'rm -rf ~/.m2/repository/org/apache/commons/commons-compress'
+                    sh 'rm -rf ~/.m2/repository/org/codehaus/plexus/plexus-archiver'
                     sh 'mvn clean package -DskipTests'
                     sh 'podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/gentest:SNAPSHOT-$SAFE_BRANCH_NAME-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME', credentialsId: "$DOCKER_CREDENTIAL_ID",)]) {
